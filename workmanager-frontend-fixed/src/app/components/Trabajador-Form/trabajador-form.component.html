@@ -1,0 +1,98 @@
+<form>
+  <div class="row-cols-2">
+    <div class="form-group">
+      <label><i class="fas fa-user"></i> Nombre</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="fas fa-user"></i></span>
+        <input type="text" class="form-control"
+          [ngModel]="trabajador().nombre"
+          (ngModelChange)="actualizarCampo('nombre', $event)"
+          name="nombre" placeholder="Ingrese el nombre" [disabled]="!esAdmin" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label><i class="fas fa-user-tag"></i> Apellido</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+        <input type="text" class="form-control"
+          [ngModel]="trabajador().apellido"
+          (ngModelChange)="actualizarCampo('apellido', $event)"
+          name="apellido" placeholder="Ingrese el apellido" [disabled]="!esAdmin" required>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label><i class="fas fa-envelope"></i> Email</label>
+    <div class="input-group">
+      <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+      <input type="email" class="form-control"
+        [ngModel]="trabajador().email"
+        (ngModelChange)="actualizarCampo('email', $event)"
+        name="email" placeholder="correo@ejemplo.com" [disabled]="!esAdmin" required>
+    </div>
+  </div>
+
+  <div class="row-cols-2">
+    <div class="form-group">
+      <label><i class="fas fa-phone"></i> Teléfono</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+        <input type="number" class="form-control"
+          [ngModel]="trabajador().telefono"
+          (ngModelChange)="actualizarCampo('telefono', $event)"
+          name="telefono" placeholder="987654321" [disabled]="!esAdmin" required>
+      </div>
+    </div>
+    <div class="form-group">
+      <label><i class="fas fa-calendar"></i> Fecha</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+        <input type="date" class="form-control"
+          [ngModel]="trabajador().fecha"
+          (ngModelChange)="actualizarCampo('fecha', $event)"
+          name="fecha" [disabled]="!esAdmin" required>
+      </div>
+    </div>
+  </div>
+
+  <div class="row-cols-2">
+    <div class="form-group">
+      <label><i class="fas fa-venus-mars"></i> Sexo</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
+        <select class="form-control"
+          [ngModel]="trabajador().sexo"
+          (ngModelChange)="actualizarCampo('sexo', $event)"
+          name="sexo" [disabled]="!esAdmin" required>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label><i class="fas fa-dollar-sign"></i> Salario</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+        <input type="number" class="form-control"
+          [ngModel]="trabajador().salario"
+          (ngModelChange)="actualizarCampo('salario', $event)"
+          name="salario" placeholder="0.00" step="0.01" [disabled]="!esAdmin" required>
+      </div>
+    </div>
+  </div>
+
+  <div class="box-footer">
+    <button type="button" class="btn btn-primary" (click)="guardar()" *ngIf="esAdmin">
+      <i class="fas fa-save"></i> <span>Guardar</span>
+    </button>
+    <button type="button" class="btn btn-secondary" (click)="volver()">
+      <i class="fas fa-arrow-left"></i> <span>Volver</span>
+    </button>
+  </div>
+
+  <div *ngIf="!esAdmin" class="alert">
+    <i class="fas fa-info-circle"></i>
+    Modo solo lectura  Solo los administradores pueden editar
+  </div>
+</form>

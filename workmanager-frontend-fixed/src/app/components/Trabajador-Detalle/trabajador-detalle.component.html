@@ -1,0 +1,67 @@
+<div class="container">
+  <div class="detail-card" *ngIf="trabajador()">
+    <div class="detail-header">
+      <i class="fas fa-id-card-alt"></i>
+      <h2>Detalle del Trabajador</h2>
+    </div>
+
+    <div class="detail-body">
+      <ul class="list-group">
+        <li class="list-group-item active">
+          <i class="fas fa-user-circle"></i>
+          <span>{{ trabajador()!.nombre }} {{ trabajador()!.apellido }}</span>
+        </li>
+        <li class="list-group-item">
+          <i class="fas fa-user"></i>
+          <span class="detail-label">Nombre:</span>
+          <span class="detail-value">{{ trabajador()!.nombre }}</span>
+        </li>
+        <li class="list-group-item">
+          <i class="fas fa-user-tag"></i>
+          <span class="detail-label">Apellido:</span>
+          <span class="detail-value">{{ trabajador()!.apellido }}</span>
+        </li>
+        <li class="list-group-item">
+          <i class="fas fa-envelope"></i>
+          <span class="detail-label">Email:</span>
+          <span class="detail-value">{{ trabajador()!.email }}</span>
+        </li>
+        <li class="list-group-item">
+          <i class="fas fa-calendar"></i>
+          <span class="detail-label">Fecha:</span>
+          <span class="detail-value">{{ trabajador()!.fecha | date:'dd/MM/yyyy' }}</span>
+        </li>
+        <li class="list-group-item">
+          <i class="fas fa-phone"></i>
+          <span class="detail-label">Teléfono:</span>
+          <span class="detail-value">{{ trabajador()!.telefono }}</span>
+        </li>
+        <li class="list-group-item">
+          <i class="fas fa-venus-mars"></i>
+          <span class="detail-label">Sexo:</span>
+          <span class="detail-value">{{ trabajador()!.sexo }}</span>
+        </li>
+        <li class="list-group-item">
+          <i class="fas fa-money-bill-wave"></i>
+          <span class="detail-label">Salario:</span>
+          <span class="detail-value">S/. {{ trabajador()!.salario | number:'1.2-2' }}</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="btn-container">
+      <button (click)="editar()" class="btn-edit">
+        <i class="fas fa-edit"></i> <span>Editar</span>
+      </button>
+      <button (click)="volver()" class="btn-back">
+        <i class="fas fa-arrow-left"></i> <span>Volver</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="spinner-container" *ngIf="!trabajador()">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+</div>
