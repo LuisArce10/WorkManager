@@ -1,0 +1,34 @@
+<div class="tarea-form">
+  <h3>{{ id ? 'Editar Tarea' : 'Crear Tarea' }}</h3>
+  <div>
+    <label>Título</label>
+    <input [(ngModel)]="titulo" />
+  </div>
+  <div>
+    <label>Descripción</label>
+    <textarea [(ngModel)]="descripcion"></textarea>
+  </div>
+  <div>
+    <label>Vencimiento</label>
+    <input type="date" [(ngModel)]="fechaVencimiento" />
+  </div>
+  <div>
+    <label>Estado</label>
+    <select [(ngModel)]="estado">
+      <option value="PENDING">PENDIENTE</option>
+      <option value="IN_PROGRESS">EN PROGRESO</option>
+      <option value="DONE">COMPLETADA</option>
+    </select>
+  </div>
+  <div>
+    <label>Asignado</label>
+    <select [(ngModel)]="trabajadorId">
+      <option [ngValue]="null">-- Ninguno --</option>
+      <option *ngFor="let t of trabajadores" [ngValue]="t.id">{{ t.nombre }} {{ t.apellido }}</option>
+    </select>
+  </div>
+  <div class="actions">
+    <button (click)="guardar()">Guardar</button>
+    <button (click)="cancel()">Cancelar</button>
+  </div>
+</div>

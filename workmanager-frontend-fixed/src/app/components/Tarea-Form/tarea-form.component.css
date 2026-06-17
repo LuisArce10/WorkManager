@@ -1,0 +1,4 @@
+.tarea-form { padding:12px; max-width:600px; }
+.tarea-form div { margin-bottom:8px; }
+.tarea-form input, .tarea-form textarea, .tarea-form select { width:100%; padding:6px; }
+.tarea-form .actions { display:flex; gap:8px; }

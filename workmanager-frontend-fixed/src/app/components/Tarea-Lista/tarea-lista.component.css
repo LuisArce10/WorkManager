@@ -1,0 +1,7 @@
+.tareas-container { padding: 12px; }
+.tareas-container .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.tareas-container .actions input { padding:6px; margin-right:6px; }
+.tareas-container .actions button { margin-left:6px; }
+.table { width:100%; border-collapse:collapse; }
+.table th, .table td { border:1px solid #ddd; padding:8px; }
+.table th { background:#f4f4f4; }

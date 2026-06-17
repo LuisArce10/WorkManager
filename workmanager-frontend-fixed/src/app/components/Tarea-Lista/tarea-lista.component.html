@@ -1,0 +1,38 @@
+<div class="tareas-container">
+  <div class="header">
+    <h3>Tareas</h3>
+    <div class="actions">
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar tareas..." />
+      <button (click)="buscar()">Buscar</button>
+      <button (click)="limpiar()">Limpiar</button>
+      <button *ngIf="isAdmin" (click)="nuevo()">Nueva Tarea</button>
+    </div>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Título</th>
+        <th>Estado</th>
+        <th>Vencimiento</th>
+        <th>Asignado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let tarea of tareas(); let i = index">
+        <td>{{ i + 1 + (currentPage() * pageSize) }}</td>
+        <td>{{ tarea.titulo }}</td>
+        <td>{{ tarea.estado }}</td>
+        <td>{{ tarea.fechaVencimiento }}</td>
+        <td>{{ tarea.trabajador?.nombre || '-' }}</td>
+        <td>
+          <button *ngIf="isAdmin" (click)="editar(tarea.id!)">Editar</button>
+          <button *ngIf="isAdmin" (click)="eliminar(tarea.id!)">Eliminar</button>
+        </td>
+      </tr>
+      <tr *ngIf="tareas().length === 0"><td colspan="6">No hay tareas</td></tr>
+    </tbody>
+  </table>
+</div>

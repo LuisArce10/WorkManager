@@ -22,7 +22,11 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
 
         var authorities = usuario.getRoles().stream()
-                .map(rol -> new SimpleGrantedAuthority(rol.getNombre()))
+                .map(rol -> {
+                    String name = rol.getNombre();
+                    if (!name.startsWith("ROLE_")) name = "ROLE_" + name;
+                    return new SimpleGrantedAuthority(name);
+                })
                 .collect(Collectors.toList());
 
         return new org.springframework.security.core.userdetails.User(
