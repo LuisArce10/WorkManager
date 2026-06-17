@@ -5,12 +5,20 @@ import repositorios.UsuarioRepository;
 import servicio.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -26,41 +34,34 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private security.JwtTokenProvider jwtTokenProvider;
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
 
         String username = credentials.get("username");
         String password = credentials.get("password");
 
-        System.out.println("USERNAME = [" + username + "]");
-        System.out.println("PASSWORD = [" + password + "]");
+        try {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsername(username);
+            String token = jwtTokenProvider.generateToken(authentication);
 
-        if (usuarioOpt.isEmpty()) {
-            System.out.println("USUARIO NO ENCONTRADO");
-            return ResponseEntity.badRequest().body("Usuario no encontrado");
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("username", userDetails.getUsername());
+            response.put("roles", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+
+            return ResponseEntity.ok(response);
+        } catch (AuthenticationException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
         }
-
-        Usuario usuario = usuarioOpt.get();
-
-        System.out.println("HASH BD = " + usuario.getPassword());
-
-        boolean coincide = passwordEncoder.matches(password, usuario.getPassword());
-
-        System.out.println("COINCIDE = " + coincide);
-
-        if (!coincide) {
-            return ResponseEntity.badRequest().body("Contraseña incorrecta");
-        }
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("username", usuario.getUsername());
-        response.put("id", usuario.getId());
-        response.put("roles", usuario.getRoles());
-        response.put("message", "Login exitoso");
-
-        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/registro")

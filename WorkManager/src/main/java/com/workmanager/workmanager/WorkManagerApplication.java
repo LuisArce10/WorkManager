@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages = {
         "com.workmanager.workmanager",
         "config",
+    "security",
         "controlador",
         "servicio",
         "repositorios",
