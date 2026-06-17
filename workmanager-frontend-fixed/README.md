@@ -57,3 +57,35 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+---
+
+## Quick run & API integration notes
+
+Development server:
+
+```bash
+cd workmanager-frontend-fixed
+npm install
+npm run start
+```
+
+Open: http://localhost:4200/
+
+Authentication:
+
+- The login form posts to `http://localhost:8080/api/auth/login`. The response is stored in `localStorage` as `token` and `usuario`.
+- On app start, if a token exists, the app calls `GET /api/auth/me` to restore the user session.
+- An HTTP interceptor automatically adds `Authorization: Bearer <token>` to outgoing requests.
+
+Testing with curl:
+
+```bash
+# login and get token
+curl -s -X POST http://localhost:8080/api/auth/login -H "Content-Type: application/json" -d '{"username":"sandra","password":"12345"}'
+
+# call protected endpoint (replace <token>)
+curl -H "Authorization: Bearer <token>" http://localhost:8080/api/trabajadores
+```
+
+If you want a Postman collection or an automated smoke-test script, tell me and I will add it.

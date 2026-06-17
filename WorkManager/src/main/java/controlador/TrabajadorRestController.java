@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import entidades.Trabajador;
@@ -24,6 +25,7 @@ public class TrabajadorRestController {
     private TrabajadorService trabajadorService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> listar(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -44,6 +46,7 @@ public class TrabajadorRestController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     public ResponseEntity<?> obtener(@PathVariable Long id) {
         Trabajador trabajador = trabajadorService.findOne(id);
         if (trabajador == null) return ResponseEntity.notFound().build();
@@ -51,12 +54,14 @@ public class TrabajadorRestController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> crear(@Valid @RequestBody Trabajador trabajador) {
         trabajadorService.save(trabajador);
         return ResponseEntity.status(HttpStatus.CREATED).body(trabajador);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> actualizar(@PathVariable Long id,
                                         @Valid @RequestBody Trabajador trabajador) {
         Trabajador existente = trabajadorService.findOne(id);
@@ -75,6 +80,7 @@ public class TrabajadorRestController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> eliminar(@PathVariable Long id) {
         Trabajador trabajador = trabajadorService.findOne(id);
         if (trabajador == null) return ResponseEntity.notFound().build();
