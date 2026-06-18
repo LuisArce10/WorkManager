@@ -13,12 +13,12 @@ public interface TrabajadorRepository extends JpaRepository<Trabajador, Long> {
     Page<Trabajador> findByActivoTrue(Pageable pageable);
 
 
+    // Modifica tu `@Query` de búsqueda para quitarle el "e.activo = true AND"
     @Query("""
-        SELECT e FROM Trabajador e
-        WHERE e.activo = true 
-          AND (lower(e.nombre) LIKE lower(concat('%', :search, '%'))
-           OR lower(e.apellido) LIKE lower(concat('%', :search, '%'))
-           OR lower(e.email) LIKE lower(concat('%', :search, '%')))
+    SELECT e FROM Trabajador e
+    WHERE lower(e.nombre) LIKE lower(concat('%', :search, '%'))
+       OR lower(e.apellido) LIKE lower(concat('%', :search, '%'))
+       OR lower(e.email) LIKE lower(concat('%', :search, '%'))
     """)
     Page<Trabajador> buscar(@Param("search") String search, Pageable pageable);
 }

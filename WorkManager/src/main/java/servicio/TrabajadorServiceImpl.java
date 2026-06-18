@@ -41,15 +41,14 @@ public class TrabajadorServiceImpl implements TrabajadorService {
     @Override
     @Transactional(readOnly = true)
     public Page<Trabajador> findAll(Pageable pageable) {
-        // Trae únicamente los que tengan activo = true
-        return trabajadorRepository.findByActivoTrue(pageable);
+        return trabajadorRepository.findAll(pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<Trabajador> buscar(String searchTerm, Pageable pageable) {
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
-            return trabajadorRepository.findByActivoTrue(pageable);
+            return trabajadorRepository.findAll(pageable); // CAMBIO
         }
         return trabajadorRepository.buscar(searchTerm, pageable);
     }

@@ -87,4 +87,5 @@ public class TrabajadorRestController {
         trabajadorService.delete(id);
         return ResponseEntity.ok().build();
     }
+
 }
