@@ -88,4 +88,16 @@ public class TrabajadorRestController {
         return ResponseEntity.ok().build();
     }
 
+    // ... (resto de tus imports)
+    @PutMapping("/activar/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> activar(@PathVariable Long id) {
+        Trabajador trabajador = trabajadorService.findOne(id);
+        if (trabajador == null) return ResponseEntity.notFound().build();
+
+        trabajadorService.activar(id);
+        return ResponseEntity.ok().build();
+    }
+// ...
+
 }

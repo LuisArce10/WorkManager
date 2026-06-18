@@ -6,5 +6,6 @@ export interface Trabajador {
   telefono: number;
   sexo: string;
   salario: number;
-  fecha: Date | string;
+  fecha: Date | string; // <--- Cambia esto
+  activo?: boolean;
 }

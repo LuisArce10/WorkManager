@@ -111,18 +111,31 @@ export class TrabajadorListaComponent implements OnInit {
     this.router.navigate(['/trabajadores/editar', id]);
   }
 
-  eliminar(id: number): void {
-
+eliminar(id: number): void {
     if (confirm('¿Está seguro de que desea desactivar a este trabajador? Perderá el acceso al sistema inmediatamente.')) {
       this.trabajadorService.eliminarTrabajador(id).subscribe({
         next: () => {
-  
           alert('Trabajador desactivado correctamente.');
           this.cargarTrabajadores(); 
         },
         error: (err) => {
           console.error('Error al desactivar:', err);
           alert('No se pudo desactivar al trabajador.');
+        }
+      });
+    }
+  }
+
+  activar(id: number): void {
+    if (confirm('¿Está seguro de que desea reactivar a este trabajador? Se le devolverá el acceso al sistema.')) {
+      this.trabajadorService.activarTrabajador(id).subscribe({
+        next: () => {
+          alert('Trabajador reactivado correctamente.');
+          this.cargarTrabajadores(); 
+        },
+        error: (err) => {
+          console.error('Error al activar:', err);
+          alert('No se pudo activar al trabajador.');
         }
       });
     }

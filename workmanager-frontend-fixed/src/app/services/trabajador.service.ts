@@ -47,8 +47,16 @@ export class TrabajadorService {
     });
   }
 
+  // --- MÉTODO RECUPERADO ---
   actualizarTrabajador(id: number, trabajador: Trabajador): Observable<Trabajador> {
     return this.http.put<Trabajador>(`${this.apiUrl}/${id}`, trabajador, { 
+      headers: this.getAuthHeaders() 
+    });
+  }
+
+  // --- MÉTODO DE ACTIVACIÓN ---
+  activarTrabajador(id: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/activar/${id}`, {}, { 
       headers: this.getAuthHeaders() 
     });
   }

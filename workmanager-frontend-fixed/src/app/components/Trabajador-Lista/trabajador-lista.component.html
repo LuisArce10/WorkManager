@@ -47,11 +47,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let trabajador of trabajadores(); let i = index">
+          <tr *ngFor="let trabajador of trabajadores(); let i = index" [class.table-secondary]="!trabajador.activo">
             <td><strong>{{ i + 1 + (currentPage() * pageSize) }}</strong></td>
             <td>{{ trabajador.nombre }}</td>
             <td>{{ trabajador.apellido }}</td>
-            <td>{{ trabajador.email }}</td>
+            <td>
+              {{ trabajador.email }}
+              <span *ngIf="!trabajador.activo" class="badge bg-danger" style="margin-left: 5px; font-size: 10px;">Inactivo</span>
+            </td>
             <td>{{ trabajador.fecha | date:'dd/MM/yyyy' }}</td>
             <td>{{ trabajador.telefono }}</td>
             <td>{{ trabajador.sexo }}</td>
@@ -66,9 +69,15 @@
                   Editar
                 </button>
                 
-                <button *ngIf="isAdmin" class="btn btn-sm" style="background-color: #ff9800; border-color: #ff9800; color: white;" (click)="eliminar(trabajador.id!)">
-                  Desactivar
-                </button>
+                <ng-container *ngIf="isAdmin">
+                  <button *ngIf="trabajador.activo" class="btn btn-sm" style="background-color: #ff9800; border-color: #ff9800; color: white;" (click)="eliminar(trabajador.id!)">
+                    Desactivar
+                  </button>
+                  
+                  <button *ngIf="!trabajador.activo" class="btn btn-success btn-sm" (click)="activar(trabajador.id!)">
+                    Activar
+                  </button>
+                </ng-container>
               </div>
             </td>
           </tr>

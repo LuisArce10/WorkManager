@@ -48,7 +48,7 @@ public class TrabajadorServiceImpl implements TrabajadorService {
     @Transactional(readOnly = true)
     public Page<Trabajador> buscar(String searchTerm, Pageable pageable) {
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
-            return trabajadorRepository.findAll(pageable); // CAMBIO
+            return trabajadorRepository.findAll(pageable);
         }
         return trabajadorRepository.buscar(searchTerm, pageable);
     }
@@ -76,22 +76,14 @@ public class TrabajadorServiceImpl implements TrabajadorService {
             nuevoUsuario.setRoles(roles);
 
             usuarioRepository.save(nuevoUsuario);
-
-            System.out.println("=================================================");
-            System.out.println("¡USUARIO DE ACCESO CREADO AUTOMÁTICAMENTE!");
-            System.out.println("Username: " + usernameLimpio);
-            System.out.println("Password Temporal: " + claveTemporal);
-            System.out.println("=================================================");
         }
     }
 
     @Override
     @Transactional
     public void delete(Long id) {
-
         Trabajador trabajador = trabajadorRepository.findById(id).orElse(null);
         if (trabajador != null) {
-
             trabajador.setActivo(false);
             trabajadorRepository.save(trabajador);
 
@@ -108,5 +100,23 @@ public class TrabajadorServiceImpl implements TrabajadorService {
     @Transactional(readOnly = true)
     public Trabajador findOne(Long id) {
         return trabajadorRepository.findById(id).orElse(null);
+    }
+
+    // --- AQUÍ ESTÁ EL MÉTODO QUE TE FALTABA ---
+    @Override
+    @Transactional
+    public void activar(Long id) {
+        Trabajador trabajador = trabajadorRepository.findById(id).orElse(null);
+        if (trabajador != null) {
+            trabajador.setActivo(true);
+            trabajadorRepository.save(trabajador);
+
+            String usernameLimpio = trabajador.getEmail().split("@")[0].toLowerCase();
+            usuarioRepository.findByUsername(usernameLimpio).ifPresent(usuario -> {
+                usuario.setEnabled(true);
+                usuarioRepository.save(usuario);
+                System.out.println("Cuenta de usuario '" + usernameLimpio + "' reactivada.");
+            });
+        }
     }
 }
