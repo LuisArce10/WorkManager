@@ -119,7 +119,7 @@ export class TrabajadorListaComponent implements OnInit {
       return;
     }
     if (confirm('¿Estás seguro de cesar al trabajador? Esta acción no elimina sus datos, solo lo marca como CESADO.')) {
-      this.trabajadorService.eliminarTrabajador(id).subscribe({
+      this.trabajadorService.cambiarEstado(id, 'CESADO').subscribe({
         next: (data) => {
           alert(data?.mensaje || 'Trabajador cesado exitosamente');
           this.cargarTrabajadores();

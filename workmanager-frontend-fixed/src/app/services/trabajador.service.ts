@@ -35,10 +35,6 @@ export class TrabajadorService {
     return this.http.put<Trabajador>(`${this.apiUrl}/${id}`, trabajador);
   }
 
-  eliminarTrabajador(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
-  }
-
   cambiarEstado(id: number, estado: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}/estado`, { estado });
   }

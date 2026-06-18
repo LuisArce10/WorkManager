@@ -84,22 +84,6 @@ public class TrabajadorRestController {
         return ResponseEntity.ok(existente);
     }
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
-        Trabajador trabajador = trabajadorService.findOne(id);
-        if (trabajador == null) return ResponseEntity.notFound().build();
-        if (trabajador.getEstado() == EstadoTrabajador.CESADO) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "El trabajador ya se encuentra cesado");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
-        trabajadorService.delete(id);
-        Map<String, String> response = new HashMap<>();
-        response.put("mensaje", "Trabajador cesado exitosamente");
-        return ResponseEntity.ok(response);
-    }
-
     @PutMapping("/{id}/estado")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> cambiarEstado(@PathVariable Long id,
