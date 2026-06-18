@@ -1,148 +1,108 @@
-<div class="layout-container">
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <div class="user-box">
-        <i class="fas fa-user-circle"></i>
-        <div class="user-info-sidebar">
-          <span class="username">{{ currentUser?.username }}</span>
-          <span class="badge-sidebar" [class.badge-admin]="isAdmin" [class.badge-user]="!isAdmin">
-            {{ isAdmin ? 'ADMIN' : 'USER' }}
-          </span>
-        </div>
+<div class="main-card">
+  <div class="card-header">
+    <h4>
+      <span>Gestión de Trabajadores</span>
+      <span class="vista-badge">Panel de Administración</span>
+    </h4>
+  </div>
+
+  <div class="card-body">
+    <div class="search-section">
+      <div class="search-form">
+        <input
+          type="text"
+          [ngModel]="searchTerm()"
+          (ngModelChange)="onSearchTermChange($event)"
+          (keyup.enter)="buscar()"
+          class="search-input"
+          placeholder="Buscar por nombre, apellido o correo..."
+          autocomplete="off">
+        
+        <button (click)="buscar()" class="btn btn-search">Buscar</button>
+        <button *ngIf="searchTerm()" (click)="limpiarBusqueda()" class="btn btn-clear">Limpiar</button>
+
+        <button *ngIf="isAdmin" (click)="nuevo()" class="btn btn-warning" style="margin-left: auto;">
+          Registrar Trabajador
+        </button>
+      </div>
+
+      <div class="search-info" *ngIf="searchTerm()">
+        <strong>Filtrando por:</strong> "{{ searchTerm() }}" - {{ totalItems() }} resultado(s) encontrado(s)
       </div>
     </div>
 
-    <nav class="sidebar-nav">
-      <button class="nav-item" [class.active]="vistaActual === 'ver'" (click)="cambiarVista('ver')">
-        <i class="fas fa-eye"></i>
-        <span>Ver / Detalles</span>
-      </button>
-      <button *ngIf="isAdmin" class="nav-item" [class.active]="vistaActual === 'editar'" (click)="cambiarVista('editar')">
-        <i class="fas fa-edit"></i>
-        <span>Editar</span>
-      </button>
-      <button *ngIf="isAdmin" class="nav-item" [class.active]="vistaActual === 'eliminar'" (click)="cambiarVista('eliminar')">
-        <i class="fas fa-trash-alt"></i>
-        <span>Eliminar</span>
-      </button>
-      <button *ngIf="isAdmin" class="nav-item nav-item-add" (click)="nuevo()">
-        <i class="fas fa-user-plus"></i>
-        <span>Agregar Nuevo Trabajador</span>
-      </button>
-    </nav>
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Fecha</th>
+            <th>Teléfono</th>
+            <th>Sexo</th>
+            <th>Salario</th>
+            <th>Acciones</th> 
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let trabajador of trabajadores(); let i = index">
+            <td><strong>{{ i + 1 + (currentPage() * pageSize) }}</strong></td>
+            <td>{{ trabajador.nombre }}</td>
+            <td>{{ trabajador.apellido }}</td>
+            <td>{{ trabajador.email }}</td>
+            <td>{{ trabajador.fecha | date:'dd/MM/yyyy' }}</td>
+            <td>{{ trabajador.telefono }}</td>
+            <td>{{ trabajador.sexo }}</td>
+            <td>S/. {{ trabajador.salario | number:'1.2-2' }}</td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn btn-info btn-sm" (click)="verDetalle(trabajador.id!)">
+                  Ver
+                </button>
+                
+                <button *ngIf="isAdmin" class="btn btn-warning btn-sm" (click)="editar(trabajador.id!)">
+                  Editar
+                </button>
+                
+                <button *ngIf="isAdmin" class="btn btn-sm" style="background-color: #ff9800; border-color: #ff9800; color: white;" (click)="eliminar(trabajador.id!)">
+                  Desactivar
+                </button>
+              </div>
+            </td>
+          </tr>
 
-    <div class="sidebar-footer">
-      <button class="btn-logout-sidebar" (click)="logout()">
-        <i class="fas fa-sign-out-alt"></i>
-        <span>Cerrar Sesión</span>
-      </button>
+          <tr *ngIf="trabajadores().length === 0">
+            <td colspan="9">
+              <div class="no-data">
+                <p *ngIf="searchTerm()">No se encontraron registros coincidentes con el término: "{{ searchTerm() }}"</p>
+                <p *ngIf="!searchTerm()">No hay trabajadores registrados en el sistema.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </aside>
 
-  <main class="main-content">
-    <div class="main-card">
-      <div class="card-header">
-        <h4>
-          <i class="fas fa-users"></i>
-          Gestión de Trabajadores
-          <span class="vista-badge">{{ obtenerTituloVista() }}</span>
-        </h4>
-      </div>
-      <div class="card-body">
-        <div class="search-section">
-          <div class="search-form">
-            <input
-              type="text"
-              [ngModel]="searchTerm()"
-              (ngModelChange)="onSearchTermChange($event)"
-              (keyup.enter)="buscar()"
-              class="search-input"
-              placeholder="🔍 Buscar por nombre, apellido, email..."
-              autocomplete="off">
-            <button (click)="buscar()" class="btn btn-search">
-              <i class="fas fa-search"></i> Buscar
-            </button>
-            <button *ngIf="searchTerm()" (click)="limpiarBusqueda()" class="btn btn-clear">
-              <i class="fas fa-times"></i> Limpiar
-            </button>
-          </div>
-          <div class="search-info" *ngIf="searchTerm()">
-            <i class="fas fa-filter"></i>
-            <strong>Filtrando por:</strong> "{{ searchTerm() }}"
-            - {{ totalItems() }} resultado(s) encontrado(s)
-          </div>
-        </div>
-
-        <div class="table-container">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>NOMBRE</th>
-                <th>APELLIDO</th>
-                <th>EMAIL</th>
-                <th>FECHA</th>
-                <th>TELÉFONO</th>
-                <th>SEXO</th>
-                <th>SALARIO</th>
-                <th>{{ obtenerTituloColumnaAccion() }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let trabajador of trabajadores(); let i = index">
-                <td>{{ i + 1 + (currentPage() * pageSize) }}</td>
-                <td>{{ trabajador.nombre }}</td>
-                <td>{{ trabajador.apellido }}</td>
-                <td>{{ trabajador.email }}</td>
-                <td>{{ trabajador.fecha | date:'dd/MM/yyyy' }}</td>
-                <td>{{ trabajador.telefono }}</td>
-                <td>{{ trabajador.sexo }}</td>
-                <td>S/. {{ trabajador.salario | number:'1.2-2' }}</td>
-                <td>
-                  <button *ngIf="vistaActual === 'ver'" class="btn btn-info btn-sm" (click)="verDetalle(trabajador.id!)">
-                    <i class="fas fa-eye"></i> Ver
-                  </button>
-                  <button *ngIf="vistaActual === 'editar' && isAdmin" class="btn btn-warning btn-sm" (click)="editar(trabajador.id!)">
-                    <i class="fas fa-edit"></i> Editar
-                  </button>
-                  <button *ngIf="vistaActual === 'eliminar' && isAdmin" class="btn btn-danger btn-sm" (click)="eliminar(trabajador.id!)">
-                    <i class="fas fa-trash-alt"></i> Eliminar
-                  </button>
-                </td>
-              </tr>
-              <tr *ngIf="trabajadores().length === 0">
-                <td colspan="9">
-                  <div class="no-data">
-                    <i class="fas fa-inbox"></i>
-                    <p *ngIf="searchTerm()">No se encontraron trabajadores con el término: "{{ searchTerm() }}"</p>
-                    <p *ngIf="!searchTerm()">No hay trabajadores registrados</p>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="pagination-container" *ngIf="totalPages() > 0">
-          <ul class="pagination">
-            <li class="page-item" [class.disabled]="currentPage() === 0">
-              <button class="page-link" (click)="cambiarPagina(0)" [disabled]="currentPage() === 0">Primera</button>
-            </li>
-            <li class="page-item" [class.disabled]="currentPage() === 0">
-              <button class="page-link" (click)="cambiarPagina(currentPage() - 1)" [disabled]="currentPage() === 0">&laquo;</button>
-            </li>
-            <li class="page-item" *ngFor="let page of getPaginas()" [class.active]="page === currentPage()">
-              <button class="page-link" (click)="cambiarPagina(page)">{{ page + 1 }}</button>
-            </li>
-            <li class="page-item" [class.disabled]="currentPage() === totalPages() - 1">
-              <button class="page-link" (click)="cambiarPagina(currentPage() + 1)" [disabled]="currentPage() === totalPages() - 1">&raquo;</button>
-            </li>
-            <li class="page-item" [class.disabled]="currentPage() === totalPages() - 1">
-              <button class="page-link" (click)="cambiarPagina(totalPages() - 1)" [disabled]="currentPage() === totalPages() - 1">Última</button>
-            </li>
-          </ul>
-        </div>
-      </div>
+    <div class="pagination-container" *ngIf="totalPages() > 0">
+      <ul class="pagination">
+        <li class="page-item" [class.disabled]="currentPage() === 0">
+          <button class="page-link" (click)="cambiarPagina(0)" [disabled]="currentPage() === 0">Primera</button>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage() === 0">
+          <button class="page-link" (click)="cambiarPagina(currentPage() - 1)" [disabled]="currentPage() === 0">&laquo;</button>
+        </li>
+        <li class="page-item" *ngFor="let page of getPaginas()" [class.active]="page === currentPage()">
+          <button class="page-link" (click)="cambiarPagina(page)">{{ page + 1 }}</button>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage() === totalPages() - 1">
+          <button class="page-link" (click)="cambiarPagina(currentPage() + 1)" [disabled]="currentPage() === totalPages() - 1">&raquo;</button>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage() === totalPages() - 1">
+          <button class="page-link" (click)="cambiarPagina(totalPages() - 1)" [disabled]="currentPage() === totalPages() - 1">Última</button>
+        </li>
+      </ul>
     </div>
-  </main>
+  </div>
 </div>

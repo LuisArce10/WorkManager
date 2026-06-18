@@ -1,38 +1,71 @@
-<div class="tareas-container">
-  <div class="header">
-    <h3>Tareas</h3>
-    <div class="actions">
-      <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar tareas..." />
-      <button (click)="buscar()">Buscar</button>
-      <button (click)="limpiar()">Limpiar</button>
-      <button *ngIf="isAdmin" (click)="nuevo()">Nueva Tarea</button>
-    </div>
+<div class="main-card">
+  <div class="card-header">
+    <h4>
+      <span>Gestión de Tareas</span>
+      <span class="vista-badge">(Vista de Seguimiento)</span>
+    </h4>
   </div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Título</th>
-        <th>Estado</th>
-        <th>Vencimiento</th>
-        <th>Asignado</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let tarea of tareas(); let i = index">
-        <td>{{ i + 1 + (currentPage() * pageSize) }}</td>
-        <td>{{ tarea.titulo }}</td>
-        <td>{{ tarea.estado }}</td>
-        <td>{{ tarea.fechaVencimiento }}</td>
-        <td>{{ tarea.trabajador?.nombre || '-' }}</td>
-        <td>
-          <button *ngIf="isAdmin" (click)="editar(tarea.id!)">Editar</button>
-          <button *ngIf="isAdmin" (click)="eliminar(tarea.id!)">Eliminar</button>
-        </td>
-      </tr>
-      <tr *ngIf="tareas().length === 0"><td colspan="6">No hay tareas</td></tr>
-    </tbody>
-  </table>
+  <div class="card-body">
+    <div class="search-section">
+      <div class="search-form">
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          placeholder="Buscar tareas por título..." 
+          class="search-input" 
+        />
+        <button class="btn btn-search" (click)="buscar()">Buscar</button>
+        <button class="btn btn-clear" (click)="limpiar()">Limpiar</button>
+        
+        <button *ngIf="isAdmin" class="btn btn-warning" (click)="nuevo()" style="margin-left: auto;">
+          Nueva Tarea
+        </button>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Título</th>
+            <th>Estado</th>
+            <th>Vencimiento</th>
+            <th>Asignado</th>
+            <th *ngIf="isAdmin">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tarea of tareas(); let i = index">
+            <td><strong>{{ i + 1 + (currentPage() * pageSize) }}</strong></td>
+            <td>{{ tarea.titulo }}</td>
+            <td>
+              <span class="badge-estado" [ngClass]="{
+                'estado-pendiente': tarea.estado === 'PENDIENTE',
+                'estado-progreso': tarea.estado === 'EN_PROGRESO',
+                'estado-completado': tarea.estado === 'COMPLETADO'
+              }">
+                {{ tarea.estado }}
+              </span>
+            </td>
+            <td>{{ tarea.fechaVencimiento | date:'dd/MM/yyyy' }}</td>
+            <td>{{ tarea.trabajador?.nombre || '-' }} {{ tarea.trabajador?.apellido || '' }}</td>
+            <td *ngIf="isAdmin">
+              <div style="display: flex; gap: 6px;">
+                <button class="btn btn-sm btn-info" (click)="editar(tarea.id!)">Editar</button>
+                <button class="btn btn-sm btn-danger" (click)="eliminar(tarea.id!)">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+          
+          <tr *ngIf="tareas().length === 0">
+            <td colspan="6" class="no-data">
+              No se registran tareas asignadas en el sistema.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

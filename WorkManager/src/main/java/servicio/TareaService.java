@@ -13,7 +13,7 @@ public class TareaService {
     @Autowired
     private TareaRepository tareaRepository;
 
-    public Page<Tarea> findAll(org.springframework.data.domain.Pageable pageable) {
+    public Page<Tarea> findAll(Pageable pageable) {
         return tareaRepository.findAll(pageable);
     }
 
@@ -31,5 +31,9 @@ public class TareaService {
 
     public void delete(Long id) {
         tareaRepository.deleteById(id);
+    }
+
+    public Page<Tarea> findByTrabajadorId(Long trabajadorId, Pageable pageable) {
+        return tareaRepository.findByTrabajadorId(trabajadorId, pageable);
     }
 }

@@ -1,7 +1,128 @@
-.tareas-container { padding: 12px; }
-.tareas-container .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-.tareas-container .actions input { padding:6px; margin-right:6px; }
-.tareas-container .actions button { margin-left:6px; }
-.table { width:100%; border-collapse:collapse; }
-.table th, .table td { border:1px solid #ddd; padding:8px; }
-.table th { background:#f4f4f4; }
+/* --- Estructura del Panel Principal --- */
+.main-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+.card-header {
+  background: linear-gradient(135deg, #2d6a4f, #1b4332);
+  padding: 20px 28px;
+}
+
+.card-header h4 {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+}
+
+.vista-badge {
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.card-body { padding: 24px 28px; }
+.search-section { margin-bottom: 20px; }
+
+.search-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 14px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus { border-color: #2d6a4f; }
+
+/* --- Diseño de la Tabla --- */
+.table-container { overflow-x: auto; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table thead tr {
+  background: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.table th {
+  padding: 14px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: 14px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+  vertical-align: middle;
+}
+
+.table tbody tr:hover { background: #f9fafb; }
+
+.no-data {
+  text-align: center;
+  padding: 40px !important;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* --- Botones --- */
+.btn {
+  padding: 9px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.btn:active { transform: scale(0.98); }
+.btn:hover { opacity: 0.9; }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+.btn-info    { background: #3b82f6; color: #fff; }
+.btn-warning { background: #f59e0b; color: #fff; }
+.btn-danger  { background: #ef4444; color: #fff; }
+.btn-search  { background: linear-gradient(135deg, #2d6a4f, #1b4332); color: #fff; }
+.btn-clear   { background: #6b7280; color: #fff; }
+
+/* --- Badges de estados --- */
+.badge-estado {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+}
+.estado-pendiente { background: #fee2e2; color: #ef4444; }
+.estado-progreso { background: #fef3c7; color: #d97706; }
+.estado-completado { background: #d1fae5; color: #10b981; }

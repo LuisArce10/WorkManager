@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Trabajador } from '../models/trabajador.model';
 
@@ -11,6 +11,15 @@ export class TrabajadorService {
 
   constructor(private http: HttpClient) { }
 
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+    return headers;
+  }
+
   listarTrabajadores(page: number = 0, size: number = 10, search?: string): Observable<any> {
     let params = new HttpParams()
       .set('page', page.toString())
@@ -20,22 +29,33 @@ export class TrabajadorService {
       params = params.set('search', search);
     }
 
-    return this.http.get<any>(this.apiUrl, { params });
+    return this.http.get<any>(this.apiUrl, { 
+      params, 
+      headers: this.getAuthHeaders() 
+    });
   }
 
   obtenerTrabajador(id: number): Observable<Trabajador> {
-    return this.http.get<Trabajador>(`${this.apiUrl}/${id}`);
+    return this.http.get<Trabajador>(`${this.apiUrl}/${id}`, { 
+      headers: this.getAuthHeaders() 
+    });
   }
 
   crearTrabajador(trabajador: Trabajador): Observable<Trabajador> {
-    return this.http.post<Trabajador>(this.apiUrl, trabajador);
+    return this.http.post<Trabajador>(this.apiUrl, trabajador, { 
+      headers: this.getAuthHeaders() 
+    });
   }
 
   actualizarTrabajador(id: number, trabajador: Trabajador): Observable<Trabajador> {
-    return this.http.put<Trabajador>(`${this.apiUrl}/${id}`, trabajador);
+    return this.http.put<Trabajador>(`${this.apiUrl}/${id}`, trabajador, { 
+      headers: this.getAuthHeaders() 
+    });
   }
 
   eliminarTrabajador(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/${id}`, { 
+      headers: this.getAuthHeaders() 
+    });
   }
 }

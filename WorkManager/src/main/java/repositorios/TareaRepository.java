@@ -6,5 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TareaRepository extends JpaRepository<Tarea, Long> {
+
     Page<Tarea> findByTituloContainingIgnoreCaseOrDescripcionContainingIgnoreCase(String titulo, String descripcion, Pageable pageable);
+
+    Page<Tarea> findByTrabajadorId(Long trabajadorId, Pageable pageable);
 }

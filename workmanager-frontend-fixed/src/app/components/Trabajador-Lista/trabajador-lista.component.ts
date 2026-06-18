@@ -112,19 +112,17 @@ export class TrabajadorListaComponent implements OnInit {
   }
 
   eliminar(id: number): void {
-    if (!this.isAdmin) {
-      alert('No tienes permisos para eliminar trabajadores');
-      return;
-    }
-    if (confirm('¿Estás seguro de eliminar al trabajador?')) {
+
+    if (confirm('¿Está seguro de que desea desactivar a este trabajador? Perderá el acceso al sistema inmediatamente.')) {
       this.trabajadorService.eliminarTrabajador(id).subscribe({
         next: () => {
-          alert('Trabajador eliminado exitosamente');
-          this.cargarTrabajadores();
+  
+          alert('Trabajador desactivado correctamente.');
+          this.cargarTrabajadores(); 
         },
-        error: (error) => {
-          console.error('Error al eliminar:', error);
-          alert('Error al eliminar el trabajador');
+        error: (err) => {
+          console.error('Error al desactivar:', err);
+          alert('No se pudo desactivar al trabajador.');
         }
       });
     }

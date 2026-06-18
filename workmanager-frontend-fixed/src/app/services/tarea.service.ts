@@ -30,4 +30,8 @@ export class TareaService {
   eliminarTarea(id: number) {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  listarTareasPorTrabajador(trabajadorId: number, page: number, size: number, search: string = ''): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/trabajador/${trabajadorId}?page=${page}&size=${size}&search=${search}`);
+}
 }

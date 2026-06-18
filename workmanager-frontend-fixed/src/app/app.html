@@ -1,1 +1,36 @@
-<router-outlet></router-outlet>
+<div [class.layout-container]="authService.isLoggedIn()">
+  
+  <aside *ngIf="authService.isLoggedIn()" class="sidebar">
+    <div class="sidebar-header">
+      <div class="user-box">
+        <div class="user-info-sidebar">
+          <span class="username">{{ obtenerNombreUsuario() }}</span>
+          <span class="badge-sidebar" [ngClass]="authService.isAdmin() ? 'badge-admin' : 'badge-user'">
+            {{ authService.isAdmin() ? 'Administrador' : 'Trabajador' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button *ngIf="authService.isAdmin()" class="nav-item" (click)="irA('/trabajadores')">
+        Gestión de Personal
+      </button>
+
+      <button class="nav-item" (click)="irA('/tareas')">
+        Módulo de Tareas
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-logout-sidebar" (click)="cerrarSesion()">
+        Cerrar Sesión
+      </button>
+    </div>
+  </aside>
+
+  <main [class.main-content]="authService.isLoggedIn()">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>

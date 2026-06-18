@@ -41,4 +41,6 @@ public class Trabajador {
     @NotNull
     @Temporal(TemporalType.DATE)
     private Date fecha;
+
+    private boolean activo = true;
 }

@@ -41,14 +41,15 @@ public class TrabajadorServiceImpl implements TrabajadorService {
     @Override
     @Transactional(readOnly = true)
     public Page<Trabajador> findAll(Pageable pageable) {
-        return trabajadorRepository.findAll(pageable);
+        // Trae únicamente los que tengan activo = true
+        return trabajadorRepository.findByActivoTrue(pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<Trabajador> buscar(String searchTerm, Pageable pageable) {
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
-            return trabajadorRepository.findAll(pageable);
+            return trabajadorRepository.findByActivoTrue(pageable);
         }
         return trabajadorRepository.buscar(searchTerm, pageable);
     }
@@ -56,7 +57,6 @@ public class TrabajadorServiceImpl implements TrabajadorService {
     @Override
     @Transactional
     public void save(Trabajador trabajador) {
-
         trabajadorRepository.save(trabajador);
 
         String usernameLimpio = trabajador.getEmail().split("@")[0].toLowerCase();
@@ -66,10 +66,8 @@ public class TrabajadorServiceImpl implements TrabajadorService {
             nuevoUsuario.setUsername(usernameLimpio);
             nuevoUsuario.setEnabled(true);
 
-
             String claveTemporal = "User" + trabajador.getTelefono();
             nuevoUsuario.setPassword(passwordEncoder.encode(claveTemporal));
-
 
             Rol rolUser = rolRepository.findByNombre("ROLE_USER")
                     .orElseThrow(() -> new RuntimeException("Error: El rol ROLE_USER no existe en la BD."));
@@ -91,7 +89,20 @@ public class TrabajadorServiceImpl implements TrabajadorService {
     @Override
     @Transactional
     public void delete(Long id) {
-        trabajadorRepository.deleteById(id);
+
+        Trabajador trabajador = trabajadorRepository.findById(id).orElse(null);
+        if (trabajador != null) {
+
+            trabajador.setActivo(false);
+            trabajadorRepository.save(trabajador);
+
+            String usernameLimpio = trabajador.getEmail().split("@")[0].toLowerCase();
+            usuarioRepository.findByUsername(usernameLimpio).ifPresent(usuario -> {
+                usuario.setEnabled(false);
+                usuarioRepository.save(usuario);
+                System.out.println("Cuenta de usuario '" + usernameLimpio + "' inhabilitada.");
+            });
+        }
     }
 
     @Override

@@ -22,17 +22,18 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/me`);
   }
   guardarUsuario(usuario: any): void {
-    const token = usuario?.token || usuario?.accessToken || null;
-    if (token) {
-      localStorage.setItem('token', token);
-    }
+      const token = usuario?.token || usuario?.accessToken || null;
+      if (token) {
+        localStorage.setItem('token', token);
+      }
 
-    const userObj = {
-      username: usuario?.username || usuario?.user?.username || null,
-      roles: usuario?.roles || usuario?.user?.roles || null
-    };
-    localStorage.setItem('usuario', JSON.stringify(userObj));
-  }
+      const userObj = {
+        id: usuario?.id || usuario?.user?.id || null, 
+        username: usuario?.username || usuario?.user?.username || null,
+        roles: usuario?.roles || usuario?.user?.roles || null
+      };
+      localStorage.setItem('usuario', JSON.stringify(userObj));
+    }
 
   getToken(): string | null {
     return localStorage.getItem('token');
