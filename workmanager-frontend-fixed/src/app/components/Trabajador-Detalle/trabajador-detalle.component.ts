@@ -46,4 +46,14 @@ export class TrabajadorDetalleComponent implements OnInit {
   editar(): void {
     this.router.navigate(['/trabajadores/editar', this.id]);
   }
+
+  getEstadoBadge(estado: string): string {
+    switch (estado) {
+      case 'ACTIVO': return 'badge-activo';
+      case 'VACACIONES': return 'badge-vacaciones';
+      case 'SUSPENDIDO': return 'badge-suspendido';
+      case 'CESADO': return 'badge-cesado';
+      default: return '';
+    }
+  }
 }

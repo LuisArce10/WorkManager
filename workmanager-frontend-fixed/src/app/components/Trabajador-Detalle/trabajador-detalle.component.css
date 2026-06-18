@@ -88,3 +88,22 @@
 
 .btn-warning { background: #f59e0b; color: #fff; }
 .btn-secondary { background: #6b7280; color: #fff; }
+
+.estado-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-left: 4px;
+}
+
+.badge-activo { background: #d1fae5; color: #065f46; }
+.badge-vacaciones { background: #dbeafe; color: #1e40af; }
+.badge-suspendido { background: #fef3c7; color: #92400e; }
+.badge-cesado { background: #fee2e2; color: #991b1b; }
+
+.list-group-item .detail-label { font-weight: 600; color: #6b7280; margin-right: 8px; }
+.list-group-item .detail-value { color: #111827; }

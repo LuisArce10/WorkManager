@@ -49,6 +49,7 @@ export class TrabajadorListaComponent implements OnInit {
     switch (this.vistaActual) {
       case 'ver': return '(Modo: Ver Detalles)';
       case 'editar': return '(Modo: Editar)';
+      case 'eliminar': return '(Modo: Ceses)';
       default: return '';
     }
   }
@@ -57,6 +58,7 @@ export class TrabajadorListaComponent implements OnInit {
     switch (this.vistaActual) {
       case 'ver': return 'DETALLES';
       case 'editar': return 'EDITAR';
+      case 'eliminar': return 'CESAR';
       default: return 'ACCIÓN';
     }
   }
@@ -113,18 +115,18 @@ export class TrabajadorListaComponent implements OnInit {
 
   eliminar(id: number): void {
     if (!this.isAdmin) {
-      alert('No tienes permisos para eliminar trabajadores');
+      alert('No tienes permisos para cesar trabajadores');
       return;
     }
-    if (confirm('¿Estás seguro de eliminar al trabajador?')) {
+    if (confirm('¿Estás seguro de cesar al trabajador? Esta acción no elimina sus datos, solo lo marca como CESADO.')) {
       this.trabajadorService.eliminarTrabajador(id).subscribe({
-        next: () => {
-          alert('Trabajador eliminado exitosamente');
+        next: (data) => {
+          alert(data?.mensaje || 'Trabajador cesado exitosamente');
           this.cargarTrabajadores();
         },
         error: (error) => {
-          console.error('Error al eliminar:', error);
-          alert('Error al eliminar el trabajador');
+          console.error('Error al cesar:', error);
+          alert(error?.error?.error || 'Error al cesar el trabajador');
         }
       });
     }
@@ -147,5 +149,15 @@ export class TrabajadorListaComponent implements OnInit {
 
   getPaginas(): number[] {
     return Array.from({ length: this.totalPages() }, (_, i) => i);
+  }
+
+  getEstadoBadge(estado: string): string {
+    switch (estado) {
+      case 'ACTIVO': return 'badge-activo';
+      case 'VACACIONES': return 'badge-vacaciones';
+      case 'SUSPENDIDO': return 'badge-suspendido';
+      case 'CESADO': return 'badge-cesado';
+      default: return '';
+    }
   }
 }

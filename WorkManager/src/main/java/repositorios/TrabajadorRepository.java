@@ -1,6 +1,6 @@
 package repositorios;
 
-
+import entidades.EstadoTrabajador;
 import entidades.Trabajador;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,9 +12,14 @@ public interface TrabajadorRepository extends JpaRepository<Trabajador, Long> {
 
     @Query("""
         SELECT e FROM Trabajador e
-        WHERE lower(e.nombre) LIKE lower(concat('%', :search, '%'))
+        WHERE (lower(e.nombre) LIKE lower(concat('%', :search, '%'))
            OR lower(e.apellido) LIKE lower(concat('%', :search, '%'))
-           OR lower(e.email) LIKE lower(concat('%', :search, '%'))
+           OR lower(e.email) LIKE lower(concat('%', :search, '%')))
+          AND e.estado <> 'CESADO'
     """)
     Page<Trabajador> buscar(@Param("search") String search, Pageable pageable);
+
+    Page<Trabajador> findByEstadoNot(EstadoTrabajador estado, Pageable pageable);
+
+    Page<Trabajador> findByEstado(EstadoTrabajador estado, Pageable pageable);
 }

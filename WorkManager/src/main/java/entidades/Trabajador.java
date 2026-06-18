@@ -12,7 +12,6 @@ import java.util.Date;
 @Table(name = "trabajadores")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Trabajador {
 
     @Id
@@ -41,4 +40,7 @@ public class Trabajador {
     @NotNull
     @Temporal(TemporalType.DATE)
     private Date fecha;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoTrabajador estado = EstadoTrabajador.ACTIVO;
 }

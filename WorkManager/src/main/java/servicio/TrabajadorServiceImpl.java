@@ -1,5 +1,6 @@
 package servicio;
 
+import entidades.EstadoTrabajador;
 import entidades.Trabajador;
 import repositorios.TrabajadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,14 @@ public class TrabajadorServiceImpl implements TrabajadorService {
     @Override
     @Transactional(readOnly = true)
     public Page<Trabajador> findAll(Pageable pageable) {
-        return trabajadorRepository.findAll(pageable);
+        return trabajadorRepository.findByEstadoNot(EstadoTrabajador.CESADO, pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<Trabajador> buscar(String searchTerm, Pageable pageable) {
         if (searchTerm == null || searchTerm.trim().isEmpty()) {
-            return trabajadorRepository.findAll(pageable);
+            return trabajadorRepository.findByEstadoNot(EstadoTrabajador.CESADO, pageable);
         }
         return trabajadorRepository.buscar(searchTerm, pageable);
     }
@@ -46,7 +47,19 @@ public class TrabajadorServiceImpl implements TrabajadorService {
     @Override
     @Transactional
     public void delete(Long id) {
-        trabajadorRepository.deleteById(id);
+        trabajadorRepository.findById(id).ifPresent(trabajador -> {
+            trabajador.setEstado(EstadoTrabajador.CESADO);
+            trabajadorRepository.save(trabajador);
+        });
+    }
+
+    @Override
+    @Transactional
+    public void cambiarEstado(Long id, EstadoTrabajador nuevoEstado) {
+        trabajadorRepository.findById(id).ifPresent(trabajador -> {
+            trabajador.setEstado(nuevoEstado);
+            trabajadorRepository.save(trabajador);
+        });
     }
 
     @Override

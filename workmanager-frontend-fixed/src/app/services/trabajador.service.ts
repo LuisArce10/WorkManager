@@ -38,4 +38,8 @@ export class TrabajadorService {
   eliminarTrabajador(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  cambiarEstado(id: number, estado: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}/estado`, { estado });
+  }
 }

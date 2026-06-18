@@ -7,4 +7,5 @@ export interface Trabajador {
   sexo: string;
   salario: number;
   fecha: Date | string;
+  estado: string;
 }

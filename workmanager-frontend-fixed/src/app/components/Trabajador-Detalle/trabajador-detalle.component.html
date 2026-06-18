@@ -46,6 +46,13 @@
           <span class="detail-label">Salario:</span>
           <span class="detail-value">S/. {{ trabajador()!.salario | number:'1.2-2' }}</span>
         </li>
+        <li class="list-group-item">
+          <i class="fas fa-info-circle"></i>
+          <span class="detail-label">Estado:</span>
+          <span class="estado-badge" [ngClass]="getEstadoBadge(trabajador()!.estado)">
+            {{ trabajador()!.estado }}
+          </span>
+        </li>
       </ul>
     </div>
 

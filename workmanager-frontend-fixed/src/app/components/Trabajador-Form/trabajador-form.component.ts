@@ -22,12 +22,15 @@ export class TrabajadorFormComponent implements OnInit {
     telefono: 0,
     sexo: 'Masculino',
     salario: 0,
-    fecha: new Date().toISOString().split('T')[0]
+    fecha: new Date().toISOString().split('T')[0],
+    estado: 'ACTIVO'
   });
 
   esAdmin = false;
   esEdicion = false;
   id?: number;
+
+  estados = ['ACTIVO', 'VACACIONES', 'SUSPENDIDO', 'CESADO'];
 
   constructor(
     private trabajadorService: TrabajadorService,

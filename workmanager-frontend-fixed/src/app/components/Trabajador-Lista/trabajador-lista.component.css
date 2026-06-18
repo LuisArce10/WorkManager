@@ -270,3 +270,18 @@
 .page-item .page-link:hover { border-color: #2d6a4f; color: #2d6a4f; }
 .page-item.active .page-link { background: #2d6a4f; border-color: #2d6a4f; color: #fff; }
 .page-item.disabled .page-link { opacity: 0.4; cursor: not-allowed; }
+
+.estado-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.badge-activo { background: #d1fae5; color: #065f46; }
+.badge-vacaciones { background: #dbeafe; color: #1e40af; }
+.badge-suspendido { background: #fef3c7; color: #92400e; }
+.badge-cesado { background: #fee2e2; color: #991b1b; }

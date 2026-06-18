@@ -23,7 +23,7 @@
       </button>
       <button *ngIf="isAdmin" class="nav-item" [class.active]="vistaActual === 'eliminar'" (click)="cambiarVista('eliminar')">
         <i class="fas fa-trash-alt"></i>
-        <span>Eliminar</span>
+        <span>Cesar</span>
       </button>
       <button *ngIf="isAdmin" class="nav-item nav-item-add" (click)="nuevo()">
         <i class="fas fa-user-plus"></i>
@@ -85,6 +85,7 @@
                 <th>TELÉFONO</th>
                 <th>SEXO</th>
                 <th>SALARIO</th>
+                <th>ESTADO</th>
                 <th>{{ obtenerTituloColumnaAccion() }}</th>
               </tr>
             </thead>
@@ -99,6 +100,11 @@
                 <td>{{ trabajador.sexo }}</td>
                 <td>S/. {{ trabajador.salario | number:'1.2-2' }}</td>
                 <td>
+                  <span class="estado-badge" [ngClass]="getEstadoBadge(trabajador.estado)">
+                    {{ trabajador.estado }}
+                  </span>
+                </td>
+                <td>
                   <button *ngIf="vistaActual === 'ver'" class="btn btn-info btn-sm" (click)="verDetalle(trabajador.id!)">
                     <i class="fas fa-eye"></i> Ver
                   </button>
@@ -106,12 +112,12 @@
                     <i class="fas fa-edit"></i> Editar
                   </button>
                   <button *ngIf="vistaActual === 'eliminar' && isAdmin" class="btn btn-danger btn-sm" (click)="eliminar(trabajador.id!)">
-                    <i class="fas fa-trash-alt"></i> Eliminar
+                    <i class="fas fa-trash-alt"></i> Cesar
                   </button>
                 </td>
               </tr>
               <tr *ngIf="trabajadores().length === 0">
-                <td colspan="9">
+                <td colspan="10">
                   <div class="no-data">
                     <i class="fas fa-inbox"></i>
                     <p *ngIf="searchTerm()">No se encontraron trabajadores con el término: "{{ searchTerm() }}"</p>

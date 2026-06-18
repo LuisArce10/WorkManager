@@ -1,5 +1,6 @@
 package servicio;
 
+import entidades.EstadoTrabajador;
 import entidades.Trabajador;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,4 +14,5 @@ public interface TrabajadorService {
     Trabajador findOne(Long id);
     void save(Trabajador trabajador);
     void delete(Long id);
+    void cambiarEstado(Long id, EstadoTrabajador nuevoEstado);
 }
