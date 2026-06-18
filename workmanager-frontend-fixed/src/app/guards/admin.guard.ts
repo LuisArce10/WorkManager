@@ -7,9 +7,11 @@ export class AdminGuard implements CanActivate {
   constructor(private auth: AuthService, private router: Router) {}
 
   canActivate(): boolean {
-    if (this.auth.isAdmin()) return true;
-    // Redirect non-admins to the main list
-    this.router.navigate(['/trabajadores']);
+    if (this.auth.isAdmin()) {
+      return true;
+    }
+    
+    this.router.navigate(['/tareas']);
     return false;
   }
 }

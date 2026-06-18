@@ -18,7 +18,7 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/trabajadores']);
+      this.redirigirSegunRol();
     }
   }
 
@@ -33,13 +33,22 @@ export class LoginComponent {
     this.authService.login(this.credentials).subscribe({
       next: (data) => {
         this.authService.guardarUsuario(data);
-        this.router.navigate(['/trabajadores']);
+        this.redirigirSegunRol();
       },
       error: (err) => {
         this.cargando = false;
         this.error = err.error || 'Usuario o contraseña incorrectos.';
       }
     });
+  }
+
+  private redirigirSegunRol(): void {
+
+    if (this.authService.isAdmin()) {
+      this.router.navigate(['/trabajadores']); 
+    } else {
+      this.router.navigate(['/tareas']); 
+    }
   }
 
   irRegistro(): void {
