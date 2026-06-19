@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Collections;
 
 @Configuration
-@Profile("dev") // <--- ¡Esto es clave! Solo corre si activas el perfil 'dev'
+@Profile("dev")
 public class DataInitializer {
 
     @Autowired
