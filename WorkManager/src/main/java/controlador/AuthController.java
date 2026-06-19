@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,6 +66,7 @@ public class AuthController {
     }
 
     @PostMapping("/registro")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> registrar(@RequestBody Usuario usuario) {
         try {
             Usuario nuevo = usuarioService.registrarUsuario(usuario);
@@ -91,4 +93,7 @@ public class AuthController {
         usuario.setPassword(null);
         return ResponseEntity.ok(usuario);
     }
+
+
+
 }
