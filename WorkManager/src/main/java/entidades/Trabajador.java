@@ -1,5 +1,6 @@
 package entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -19,6 +20,7 @@ public class Trabajador {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usuario_id")
+    @JsonIgnoreProperties({"password", "roles"})
     private Usuario usuario;
 
     @Id

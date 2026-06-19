@@ -56,27 +56,32 @@ public class TrabajadorServiceImpl implements TrabajadorService {
     @Override
     @Transactional
     public void save(Trabajador trabajador) {
-        trabajadorRepository.save(trabajador);
-
         String usernameLimpio = trabajador.getEmail().split("@")[0].toLowerCase();
+        Usuario usuario;
 
         if (!usuarioRepository.existsByUsername(usernameLimpio)) {
-            Usuario nuevoUsuario = new Usuario();
-            nuevoUsuario.setUsername(usernameLimpio);
-            nuevoUsuario.setEnabled(true);
-
-            String claveTemporal = "User" + trabajador.getTelefono();
-            nuevoUsuario.setPassword(passwordEncoder.encode(claveTemporal));
+            usuario = new Usuario();
+            usuario.setUsername(usernameLimpio);
+            usuario.setEnabled(true);
+            usuario.setPassword(passwordEncoder.encode("User" + trabajador.getTelefono()));
 
             Rol rolUser = rolRepository.findByNombre("ROLE_USER")
-                    .orElseThrow(() -> new RuntimeException("Error: El rol ROLE_USER no existe en la BD."));
+                    .orElseThrow(() -> new RuntimeException("Error: El rol ROLE_USER no existe."));
 
             Set<Rol> roles = new HashSet<>();
             roles.add(rolUser);
-            nuevoUsuario.setRoles(roles);
+            usuario.setRoles(roles);
 
-            usuarioRepository.save(nuevoUsuario);
+            usuario = usuarioRepository.save(usuario);
+        } else {
+            usuario = usuarioRepository.findByUsername(usernameLimpio)
+                    .orElseThrow(() -> new RuntimeException("Error: Usuario no encontrado."));
         }
+
+
+        trabajador.setUsuario(usuario);
+
+        trabajadorRepository.save(trabajador);
     }
 
     @Override
