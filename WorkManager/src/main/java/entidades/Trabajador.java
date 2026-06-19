@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+
 
 @Entity
 @Table(name = "trabajadores")
@@ -14,6 +16,10 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Trabajador {
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

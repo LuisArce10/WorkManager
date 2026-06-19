@@ -41,8 +41,7 @@ export class TareaListaComponent implements OnInit {
   }
 
   cargarTareas(): void {
-    // 1. Si es Administrador, visualiza todas las tareas de manera global
-    if (this.isAdmin) {
+
       this.tareaService.listarTareas(this.currentPage(), this.pageSize, this.searchTerm)
         .subscribe({
           next: (data) => {
@@ -52,31 +51,11 @@ export class TareaListaComponent implements OnInit {
             this.totalItems.set(data.totalItems);
           },
           error: (error) => {
-            console.error('Error al cargar la lista global de tareas:', error);
+            console.error('Error al cargar las tareas:', error);
             alert('Error al obtener el listado de tareas');
           }
         });
-    } else {
-      // 2. Si es un empleado regular (Trabajador), se filtra estrictamente por su ID único
-      const trabajadorId = this.currentUser?.id;
-      
-      if (trabajadorId) {
-        this.tareaService.listarTareasPorTrabajador(trabajadorId, this.currentPage(), this.pageSize, this.searchTerm)
-          .subscribe({
-            next: (data) => {
-              this.tareas.set(data.tareas);
-              this.currentPage.set(data.currentPage);
-              this.totalPages.set(data.totalPages);
-              this.totalItems.set(data.totalItems);
-            },
-            error: (error) => {
-              console.error('Error al cargar las tareas asignadas al trabajador:', error);
-              alert('Error al cargar sus tareas asignadas');
-            }
-          });
-      }
     }
-  }
 
   buscar(): void {
     this.currentPage.set(0);

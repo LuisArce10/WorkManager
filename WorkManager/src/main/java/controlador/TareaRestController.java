@@ -1,6 +1,8 @@
 package controlador;
 
 import entidades.Tarea;
+import entidades.Usuario;
+import repositorios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import servicio.TareaService;
-
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -29,12 +30,21 @@ public class TareaRestController {
     public ResponseEntity<?> listar(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String search) {
+            @RequestParam(required = false) String search,
+            Principal principal) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Tarea> tareas = (search == null || search.isBlank())
-                ? tareaService.findAll(pageable)
-                : tareaService.buscar(search, pageable);
+        String username = principal.getName();
+        Page<Tarea> tareas;
+
+        if (username.equalsIgnoreCase("admin")) {
+            tareas = (search == null || search.isBlank())
+                    ? tareaService.findAll(pageable)
+                    : tareaService.buscar(search, pageable);
+        } else {
+
+            tareas = tareaService.findByUsername(username, pageable);
+        }
 
         Map<String, Object> response = new HashMap<>();
         response.put("tareas", tareas.getContent());
@@ -83,41 +93,5 @@ public class TareaRestController {
         if (t == null) return ResponseEntity.notFound().build();
         tareaService.delete(id);
         return ResponseEntity.ok().build();
-    }
-
-
-    @GetMapping("/trabajador/{usuarioId}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<?> listarPorTrabajador(
-            @PathVariable Long usuarioId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            Principal principal) {
-
-        Pageable pageable = PageRequest.of(page, size);
-
-        String usernameSesion = principal.getName();
-
-        // Buscamos las tareas mapeando el ID real del trabajador de forma dinámica
-        Page<Tarea> tareas;
-
-        if (usernameSesion.equals("amarilis")) {
-            // Mapeo forzado temporal de pruebas para Amarilis usando su id real de la tabla trabajadores (20)
-            tareas = tareaService.findByTrabajadorId(20L, pageable);
-        } else if (usernameSesion.equals("arnoldo")) {
-            // Mapeo forzado temporal para Arnoldo usando su id real (18)
-            tareas = tareaService.findByTrabajadorId(18L, pageable);
-        } else {
-            // Por si es cualquier otro usuario, usa el ID que venga por defecto
-            tareas = tareaService.findByTrabajadorId(usuarioId, pageable);
-        }
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("tareas", tareas.getContent());
-        response.put("totalPages", tareas.getTotalPages());
-        response.put("totalItems", tareas.getTotalElements());
-        response.put("currentPage", tareas.getNumber());
-
-        return ResponseEntity.ok(response);
     }
 }

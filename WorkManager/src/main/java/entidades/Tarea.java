@@ -2,6 +2,7 @@ package entidades;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import java.util.Date;
@@ -30,5 +31,6 @@ public class Tarea {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "trabajador_id")
+    @JsonIgnoreProperties({"usuario"})
     private Trabajador trabajador;
 }
